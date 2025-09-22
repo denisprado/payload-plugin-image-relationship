@@ -27,6 +27,7 @@ export default buildConfig({
     allowIDOnCreate: undefined,
     defaultIDType: 'number',
     init: ({ payload }): BaseDatabaseAdapter => {
+      console.log('Payload object in db.init:', payload);
       return mongooseAdapter({ payload, url: process.env.DATABASE_URI || 'mongodb://127.0.0.1/payload-plugin-template' })
     },
     name: undefined,
