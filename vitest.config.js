@@ -14,13 +14,14 @@ export default defineConfig(() => {
     plugins: [
       tsconfigPaths({
         ignoreConfigErrors: true,
-        root: './dev',
+        configFile: './dev/tsconfig.json',
       }),
     ],
     test: {
       environment: 'node',
       hookTimeout: 30_000,
       testTimeout: 30_000,
+      exclude: ['./dev/e2e.spec.ts'],
     },
   }
 })
