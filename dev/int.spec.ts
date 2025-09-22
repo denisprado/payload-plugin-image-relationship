@@ -9,7 +9,7 @@ let payload: Payload
 let mediaDoc: Media
 
 beforeAll(async () => {
-  payload = await getPayload({ config })
+  payload = await getPayload({ config, secret: 'bb4a6482db6994d6c91b3e6d6427080e408f9d687b5c22cfcbc2addadc8d6fcd' })
 
   // The 'data' object is cast to 'any' as a temporary workaround.
   // This is likely needed because the generated 'payload-types.ts' is out of sync.
