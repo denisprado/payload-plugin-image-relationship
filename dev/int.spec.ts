@@ -9,6 +9,7 @@ let payload: Payload
 let mediaDoc: Media
 
 beforeAll(async () => {
+  process.env.PAYLOAD_SECRET = 'bb4a6482db6994d6c91b3e6d6427080e408f9d687b5c22cfcbc2addadc8d6fcd';
   payload = await getPayload({ config, secret: 'bb4a6482db6994d6c91b3e6d6427080e408f9d687b5c22cfcbc2addadc8d6fcd' })
 
   // The 'data' object is cast to 'any' as a temporary workaround.
