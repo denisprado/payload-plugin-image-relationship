@@ -23,14 +23,8 @@ export default buildConfig({
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
-  db: {
-    allowIDOnCreate: undefined,
-    defaultIDType: 'number',
-    init: ({ payload }): BaseDatabaseAdapter => {
-      console.log('Payload object in db.init:', payload);
-      return mongooseAdapter({ payload, url: process.env.DATABASE_URI || 'mongodb://127.0.0.1/payload-plugin-template' })
-    },
-    name: undefined,
-  },
+  db: mongooseAdapter({
+    url: process.env.DATABASE_URI || 'mongodb://127.0.0.1/payload-plugin-template',
+  }),
   secret: process.env.PAYLOAD_SECRET || 'bb4a6482db6994d6c91b3e6d6427080e408f9d687b5c22cfcbc2addadc8d6fcd',
 })
