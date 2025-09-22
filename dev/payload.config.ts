@@ -1,4 +1,4 @@
-import { buildConfig } from 'payload'
+import { BaseDatabaseAdapter, buildConfig, Payload } from 'payload'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { imageRelationshipPlugin } from '../src/index.js' // Adicionado .js
@@ -21,4 +21,13 @@ export default buildConfig({
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
+  db: {
+    allowIDOnCreate: undefined,
+    defaultIDType: 'number',
+    init: function (args: { payload: Payload }): BaseDatabaseAdapter {
+      throw new Error('Function not implemented.')
+    },
+    name: undefined,
+  },
+  secret: '',
 })
