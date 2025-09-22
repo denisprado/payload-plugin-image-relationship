@@ -20,12 +20,17 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "payload-plugin-image-relationship": ["./src"],
+      "payload-plugin-image-relationship/*": ["./src/*"]
+    }
   },
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx",
     "./dev/next-env.d.ts",
-    "src/components/Component.tsx"
+    "./dev/**/*.ts",
+    "./dev/**/*.tsx"
   ]
 }
