@@ -7,7 +7,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-let mongo: MongoMemoryServer
+let mongo
 
 export default defineConfig(() => {
   return {
