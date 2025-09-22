@@ -10,6 +10,7 @@ const dirname = path.dirname(filename)
 let mongo
 
 export default defineConfig(() => {
+  loadEnv(path.resolve(dirname, './dev'))
   return {
     plugins: [
     ],
