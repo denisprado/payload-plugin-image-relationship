@@ -14,6 +14,7 @@ export default defineConfig(() => {
     plugins: [
       tsconfigPaths({
         ignoreConfigErrors: true,
+        root: './dev',
       }),
     ],
     test: {
