@@ -1,7 +1,6 @@
 import path from 'path'
 import { loadEnv } from 'payload/node'
 import { fileURLToPath } from 'url'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
 const filename = fileURLToPath(import.meta.url)
@@ -12,11 +11,12 @@ export default defineConfig(() => {
 
   return {
     plugins: [
-      tsconfigPaths({
-        ignoreConfigErrors: true,
-        configFile: './dev/tsconfig.json',
-      }),
     ],
+    resolve: {
+      alias: {
+        '@payload-config': path.resolve(dirname, './dev/payload.config.ts'),
+      },
+    },
     test: {
       environment: 'node',
       hookTimeout: 30_000,
