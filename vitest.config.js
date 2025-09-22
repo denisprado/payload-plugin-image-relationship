@@ -14,11 +14,11 @@ export default defineConfig(() => {
   return {
     plugins: [
     ],
-    resolve: {
-      alias: {
-        '@payload-config': path.resolve(dirname, './dev/payload.config.ts'),
-      },
-    },
+    // resolve: {
+    //   alias: {
+    //     '@payload-config': path.resolve(dirname, './dev/payload.config.ts'),
+    //   },
+    // },
     test: {
       environment: 'node',
       hookTimeout: 60_000,
