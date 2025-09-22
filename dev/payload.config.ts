@@ -6,6 +6,8 @@ import { Users } from './collections/Users.js' // Adicionado .js
 import { Media } from './collections/Media.js' // Adicionado .js
 import { Posts } from './collections/Posts.js' // Adicionado .js
 
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default buildConfig({
@@ -24,8 +26,8 @@ export default buildConfig({
   db: {
     allowIDOnCreate: undefined,
     defaultIDType: 'number',
-    init: function (args: { payload: Payload }): BaseDatabaseAdapter {
-      throw new Error('Function not implemented.')
+    init: ({ payload }): BaseDatabaseAdapter => {
+      return mongooseAdapter({ payload, url: process.env.DATABASE_URI || 'mongodb://127.0.0.1/payload-plugin-template' })
     },
     name: undefined,
   },
