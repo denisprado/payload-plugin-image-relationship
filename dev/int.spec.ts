@@ -4,17 +4,12 @@ import config from '@payload-config'
 import { getPayload } from 'payload'
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import type { Media, Post } from './payload-types.js'
-import { MongoMemoryServer } from 'mongodb-memory-server'
 
 let payload: Payload
 let mediaDoc: Media
-let mongo: MongoMemoryServer
 
 beforeAll(async () => {
-  mongo = await MongoMemoryServer.create()
-  process.env.DATABASE_URI = mongo.getUri()
-  process.env.PAYLOAD_SECRET = 'bb4a6482db6994d6c91b3e6d6427080e408f9d687b5c22cfcbc2addadc8d6fcd';
-  payload = await getPayload({ config, secret: 'bb4a6482db6994d6c91b3e6d6427080e408f9d687b5c22cfcbc2addadc8d6fcd' })
+  payload = await getPayload({ config, secret: process.env.PAYLOAD_SECRET })
 
   // The 'data' object is cast to 'any' as a temporary workaround.
   // This is likely needed because the generated 'payload-types.ts' is out of sync.
