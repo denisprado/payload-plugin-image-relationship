@@ -1,6 +1,6 @@
 {
   "name": "payload-plugin-image-relationship",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A Payload CMS plugin that enhances the relationship field to support image uploads.",
   "license": "MIT",
   "type": "module",
