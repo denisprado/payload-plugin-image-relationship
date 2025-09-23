@@ -15,13 +15,15 @@
     "../src/components/Component.tsx",
     "app/(payload)/admin/importMap.js"
   ],
+
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
       "@payload-config": ["./payload.config.ts"],
-      "plugin-package-name-placeholder": ["../src/index.ts"],
-      "plugin-package-name-placeholder/client": ["../src/exports/client.ts"]
+      "payload-plugin-image-relationship": ["../src/index.ts"],
+      "payload-plugin-image-relationship/client": ["../src/exports/client.ts"]
     },
+
     "noEmit": true,
     "emitDeclarationOnly": false
   }

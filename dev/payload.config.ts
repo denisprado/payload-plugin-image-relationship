@@ -24,7 +24,9 @@ export default buildConfig({
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
   db: mongooseAdapter({
-    url: process.env.DATABASE_URI || 'mongodb://127.0.0.1/payload-plugin-template',
+    url:
+      process.env.DATABASE_URI ||
+      'mongodb+srv://Vercel-Admin-atlas-purple-ocean:Ge9h3T906i5QYBPf@atlas-purple-ocean.7mwcsys.mongodb.net/?retryWrites=true&w=majority',
   }),
   secret:
     process.env.PAYLOAD_SECRET ||
