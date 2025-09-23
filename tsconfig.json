@@ -26,8 +26,5 @@
       "payload-plugin-image-relationship/*": ["./src/*"]
     }
   },
-  "include": [
-    "./src/**/*.ts",
-    "./src/**/*.tsx"
-  ]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }

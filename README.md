@@ -27,7 +27,7 @@ yarn add payload-plugin-image-relationship
 
 ## How to use
 
-In your `payload.config.ts`, import the plugin and add it to the `plugins` array.
+In your `payload.config.ts`, import the plugin and add it to the `plugins` array. You must enable the plugin and specify which collection(s) it should apply to.
 
 ```ts
 import { buildConfig } from 'payload'
@@ -36,49 +36,20 @@ import { imageRelationshipPlugin } from 'payload-plugin-image-relationship'
 export default buildConfig({
   // ...
   plugins: [
-    imageRelationshipPlugin(),
+    imageRelationshipPlugin({
+      enabled: true,
+      // Can be a single slug or an array of slugs
+      relationTo: 'media', 
+    }),
   ],
 })
 ```
 
-This plugin works by overriding the default `relationship` field component. To use the visual selector, you need to specify the `custom` components in your relationship field definition.
+The plugin works by programmatically finding all `relationship` fields that point to the collection(s) you specified in the `relationTo` option, and replacing their default component with a visual image selector.
 
-In your collection where you have a relationship to an `uploads` collection (e.g., `media`), add the `custom` property to the field definition:
+This approach ensures that only the intended relationship fields are affected.
 
-```ts
-import { relationship } from 'payload-plugin-image-relationship/client'
-
-// ...
-
-const Posts = {
-  slug: 'posts',
-  fields: [
-    {
-      name: 'featuredImage',
-      type: 'relationship',
-      relationTo: 'media', // must be an uploads enabled collection
-      custom: {
-        components: {
-          Field: relationship.Field,
-        }
-      }
-    },
-    {
-      name: 'gallery',
-      type: 'relationship',
-      relationTo: 'media',
-      hasMany: true,
-      custom: {
-        components: {
-          Field: relationship.Field,
-        }
-      }
-    }
-  ]
-}
-```
-
-**Important:** This plugin is designed for relationship fields that point to a collection with `upload` enabled.
+**Important:** The collections you target with `relationTo` should have `upload` enabled.
 
 ## Compatibility
 
