@@ -5,17 +5,17 @@
 A plugin for [Payload CMS](https://payloadcms.com) to enhance the relationship field with a visual image selector.
 
 ![Image Relationship Plugin Screenshot](https://raw.githubusercontent.com/forigo/payload-plugin-image-relationship/main/screenshot.png)
-*(TODO: Add a real screenshot)*
+_(TODO: Add a real screenshot)_
 
 ## Features
 
-*   Replaces the default relationship field with a visual, gallery-style interface.
-*   Displays image thumbnails for easy selection.
-*   Supports both `hasMany: false` (single selection) and `hasMany: true` (multiple selections).
-*   Search functionality to filter images by `alt` text or `filename`.
-*   Selected images are sorted and displayed first.
-*   Collapsible interface to save screen space.
-*   Shows a preview of selected images.
+- Replaces the default relationship field with a visual, gallery-style interface.
+- Displays image thumbnails for easy selection.
+- Supports both `hasMany: false` (single selection) and `hasMany: true` (multiple selections).
+- Search functionality to filter images by `alt` text or `filename`.
+- Selected images are sorted and displayed first.
+- Collapsible interface to save screen space.
+- Shows a preview of selected images.
 
 ## Installation
 
@@ -39,7 +39,7 @@ export default buildConfig({
     imageRelationshipPlugin({
       enabled: true,
       // Can be a single slug or an array of slugs
-      relationTo: 'media', 
+      relationTo: 'media',
     }),
   ],
 })
@@ -53,7 +53,7 @@ This approach ensures that only the intended relationship fields are affected.
 
 ## Compatibility
 
-*   Payload CMS: `^3.0.0`
+- Payload CMS: `^3.0.0`
 
 ## License
 

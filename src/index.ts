@@ -7,9 +7,9 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export const imageRelationshipPlugin =
-  (pluginOptions: ImageRelationshipOptions): Plugin =>
+  (pluginOptions: ImageRelationshipOptions = {}): Plugin =>
   (incomingConfig): Config => {
-    const { enabled, relationTo } = pluginOptions
+    const { enabled = false, relationTo } = pluginOptions
 
     if (!enabled || !relationTo) {
       return incomingConfig
