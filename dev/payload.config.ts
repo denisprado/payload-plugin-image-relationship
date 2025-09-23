@@ -1,7 +1,7 @@
 import { BaseDatabaseAdapter, buildConfig, Payload } from 'payload'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { imageRelationshipPlugin } from '../src/index.js' // Adicionado .js
+import { imageRelationshipPlugin } from 'payload-plugin-image-relationship'
 import { Users } from './collections/Users.js' // Adicionado .js
 import { Media } from './collections/Media.js' // Adicionado .js
 import { Posts } from './collections/Posts.js' // Adicionado .js
