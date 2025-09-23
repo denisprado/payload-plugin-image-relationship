@@ -12,15 +12,15 @@
     "../src/**/*.tsx",
     "next.config.mjs",
     ".next/types/**/*.ts",
-    "../src/components/Component.tsx"
+    "../src/components/Component.tsx",
+    "app/(payload)/admin/importMap.js"
   ],
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
       "@payload-config": ["./payload.config.ts"],
       "plugin-package-name-placeholder": ["../src/index.ts"],
-      "plugin-package-name-placeholder/client": ["../src/exports/client.ts"],
-      "plugin-package-name-placeholder/rsc": ["../src/exports/rsc.ts"]
+      "plugin-package-name-placeholder/client": ["../src/exports/client.ts"]
     },
     "noEmit": true,
     "emitDeclarationOnly": false
