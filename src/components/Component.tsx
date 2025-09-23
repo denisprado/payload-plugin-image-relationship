@@ -196,6 +196,7 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
             const isSelected =
               (field.hasMany && (value as string[])?.includes(doc.id)) || value === doc.id
             const thumbnailUrl = doc.sizes?.thumbnail?.url || doc.url
+            const fullThumbnailUrl = thumbnailUrl ? `${serverURL}${thumbnailUrl}` : undefined
 
             return (
               <div
@@ -205,7 +206,7 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
                 }`}
                 onClick={() => handleImageClick(doc.id)}
               >
-                {thumbnailUrl && <img src={thumbnailUrl} alt={doc.alt || 'media'} />}
+                {fullThumbnailUrl && <img src={fullThumbnailUrl} alt={doc.alt || 'media'} />}
                 {isSelected && <div className={`${baseClass}__selected-check`}>✔</div>}
               </div>
             )
@@ -215,9 +216,10 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
       <div className={`${baseClass}__selected-media`}>
         {selectedMedia.map((doc) => {
           const thumbnailUrl = doc.sizes?.thumbnail?.url || doc.url
+          const fullThumbnailUrl = thumbnailUrl ? `${serverURL}${thumbnailUrl}` : undefined
           return (
             <div key={doc.id} className={`${baseClass}__selected-thumbnail`}>
-              <img src={thumbnailUrl!} alt={doc.alt || 'media'} />
+              {fullThumbnailUrl && <img src={fullThumbnailUrl} alt={doc.alt || 'media'} />}
             </div>
           )
         })}
