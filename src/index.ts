@@ -1,10 +1,5 @@
 import type { Config, Plugin } from 'payload'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import type { ImageRelationshipOptions } from './types.js'
-
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
 
 export const imageRelationshipPlugin =
   (pluginOptions: ImageRelationshipOptions): Plugin =>
@@ -32,7 +27,7 @@ export const imageRelationshipPlugin =
                 ...(field.admin || {}),
                 components: {
                   ...(field.admin?.components || {}),
-                  Field: path.resolve(dirname, './components/Component.js'),
+                  Field: 'payload-plugin-image-relationship/components/Component',
                 },
               }
             }
