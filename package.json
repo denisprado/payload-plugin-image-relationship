@@ -14,6 +14,11 @@
       "types": "./dist/exports/client.d.ts",
       "import": "./dist/exports/client.js",
       "default": "./dist/exports/client.js"
+    },
+    "./components/Component": {
+      "types": "./dist/components/Component.d.ts",
+      "import": "./dist/components/Component.js",
+      "default": "./dist/components/Component.js"
     }
   },
   "main": "./dist/index.js",

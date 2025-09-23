@@ -1,10 +1,5 @@
 import type { Config, Plugin } from 'payload'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import type { Configuration as WebpackConfig } from 'webpack'
 import type { ImageRelationshipOptions } from './types.js'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export const imageRelationshipPlugin =
   (pluginOptions: ImageRelationshipOptions): Plugin =>
@@ -45,26 +40,6 @@ export const imageRelationshipPlugin =
           fields: newFields,
         }
       }),
-      admin: {
-        ...(incomingConfig.admin || {}),
-        // @ts-expect-error
-        webpack: (webpackConfig: WebpackConfig): WebpackConfig => {
-          const newConfig: WebpackConfig = {
-            ...webpackConfig,
-            resolve: {
-              ...webpackConfig.resolve,
-              alias: {
-                ...(webpackConfig.resolve?.alias || {}),
-                'payload-plugin-image-relationship/components/Component': path.resolve(
-                  __dirname,
-                  './components/Component.js',
-                ),
-              },
-            },
-          }
-          return newConfig
-        },
-      },
     }
 
     return config
