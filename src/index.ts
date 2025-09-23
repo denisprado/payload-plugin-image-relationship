@@ -3,7 +3,6 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import type { ImageRelationshipOptions } from './types.js'
 
-// @ts-expect-error - TS is incorrectly complaining about import.meta.url in an ESM project.
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
