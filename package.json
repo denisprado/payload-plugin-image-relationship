@@ -6,13 +6,13 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./client": {
-      "import": "./dist/exports/client.js",
       "types": "./dist/exports/client.d.ts",
+      "import": "./dist/exports/client.js",
       "default": "./dist/exports/client.js"
     }
   },
@@ -39,7 +39,8 @@
     "test": "pnpm test:int && pnpm test:e2e",
     "test:e2e": "playwright test",
     "test:int": "vitest",
-    "release": "npm version patch -m \"chore(release): v%s\" && npm publish && git push --follow-tags"
+    "release": "npm version patch -m \"chore(release): v%s\" && npm publish && git push --follow-tags",
+    "ship": "git add . && git commit -m \"chore: apply changes and prepare for release\" && pnpm release"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

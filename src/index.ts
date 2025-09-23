@@ -7,11 +7,11 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export const imageRelationshipPlugin =
-  (pluginOptions: ImageRelationshipOptions = {}): Plugin =>
+  (pluginOptions: ImageRelationshipOptions): Plugin =>
   (incomingConfig): Config => {
-    const { enabled = false, relationTo } = pluginOptions
+    const { enabled = true, relationTo } = pluginOptions
 
-    if (!enabled || !relationTo) {
+    if (!enabled) {
       return incomingConfig
     }
 
@@ -28,16 +28,13 @@ export const imageRelationshipPlugin =
             const match = fieldRelationTo.some((slug) => relationToSet.has(slug))
 
             if (match) {
-              return {
-                ...field,
-                admin: {
-                  ...(field.admin || {}),
-                  components: {
-                    ...(field.admin?.components || {}),
-                    Field: path.resolve(dirname, './components/Component.js'),
-                  },
+              field.admin = {
+                ...(field.admin || {}),
+                components: {
+                  ...(field.admin?.components || {}),
+                  Field: path.resolve(dirname, './components/Component.js'),
                 },
-              } as any // eslint-disable-line @typescript-eslint/no-explicit-any
+              }
             }
           }
           return field
