@@ -166,6 +166,16 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
     return value === doc.id
   })
 
+  const createFullUrl = (url: string | undefined) => {
+    if (!url) return undefined
+    try {
+      new URL(url) // Throws an error if URL is relative
+      return url
+    } catch {
+      return `${serverURL}${url}`
+    }
+  }
+
   if (initialLoading) {
     return (
       <div className={baseClass}>
@@ -294,7 +304,7 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
                 (field.hasMany && (value as (string | number)[])?.includes(doc.id)) ||
                 value === doc.id
               const thumbnailUrl = doc.sizes?.thumbnail?.url || doc.url
-              const fullThumbnailUrl = thumbnailUrl ? `${serverURL}${thumbnailUrl}` : undefined
+              const fullThumbnailUrl = createFullUrl(thumbnailUrl)
 
               return (
                 <div
@@ -322,7 +332,7 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
       <div className={`${baseClass}__selected-media`}>
         {selectedMedia.map((doc) => {
           const thumbnailUrl = doc.sizes?.thumbnail?.url || doc.url
-          const fullThumbnailUrl = thumbnailUrl ? `${serverURL}${thumbnailUrl}` : undefined
+          const fullThumbnailUrl = createFullUrl(thumbnailUrl)
           return (
             <div key={doc.id} className={`${baseClass}__selected-thumbnail`}>
               {fullThumbnailUrl && <img src={fullThumbnailUrl} alt={doc.alt || 'media'} />}
