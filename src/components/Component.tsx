@@ -1,12 +1,20 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { Collapsible, FieldLabel, TextInput, useConfig, useField } from '@payloadcms/ui'
+import React, { useCallback, useEffect, useState } from 'react'
+import {
+  Button,
+  Collapsible,
+  FieldLabel,
+  TextInput,
+  useConfig,
+  useDocumentDrawer,
+  useField,
+} from '@payloadcms/ui'
 import { RelationshipFieldClientComponent } from 'payload'
 
 const baseClass = 'image-relationship'
 
 type Doc = Record<string, unknown> & {
-  id: string
+  id: string | number
   alt?: string
   filename?: string
   url?: string
@@ -19,15 +27,21 @@ type Doc = Record<string, unknown> & {
 
 const ImageRelationship: RelationshipFieldClientComponent = (props) => {
   const { path, field } = props
-  const { value, setValue } = useField<string | string[]>({ path })
+  const { value, setValue } = useField<(string | number) | (string | number)[]>({ path })
   const {
     config: { serverURL },
   } = useConfig()
+
   const [media, setMedia] = useState<Doc[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [filter, setFilter] = useState('')
+  const [forceReload, setForceReload] = useState(0)
 
   const relationTo = Array.isArray(field.relationTo) ? field.relationTo[0] : field.relationTo
+
+  const [DocumentDrawer, DocumentDrawerToggler, { closeDrawer }] = useDocumentDrawer({
+    collectionSlug: relationTo,
+  })
 
   useEffect(() => {
     const fetchMedia = async () => {
@@ -46,11 +60,11 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
     }
 
     fetchMedia()
-  }, [serverURL, relationTo])
+  }, [serverURL, relationTo, forceReload])
 
-  const handleImageClick = (id: string) => {
+  const handleImageClick = (id: string | number) => {
     if (field.hasMany) {
-      const selected = new Set((value as string[]) || [])
+      const selected = new Set((value as (string | number)[]) || [])
       if (selected.has(id)) {
         selected.delete(id)
       } else {
@@ -62,6 +76,19 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
     }
   }
 
+  const handleSave = useCallback(
+    ({ doc }: { doc: Doc }) => {
+      if (field.hasMany) {
+        setValue([...((value as (string | number)[]) || []), doc.id])
+      } else {
+        setValue(doc.id)
+      }
+      setForceReload((v) => v + 1)
+      closeDrawer()
+    },
+    [field.hasMany, setValue, value, closeDrawer],
+  )
+
   const filteredAndSortedMedia = media
     .filter((doc) => {
       const searchText = filter.toLowerCase()
@@ -70,8 +97,12 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
       return altText.includes(searchText) || filename.includes(searchText)
     })
     .sort((a, b) => {
-      const aIsSelected = field.hasMany ? (value as string[])?.includes(a.id) : value === a.id
-      const bIsSelected = field.hasMany ? (value as string[])?.includes(b.id) : value === b.id
+      const aIsSelected = field.hasMany
+        ? (value as (string | number)[])?.includes(a.id)
+        : value === a.id
+      const bIsSelected = field.hasMany
+        ? (value as (string | number)[])?.includes(b.id)
+        : value === b.id
 
       if (aIsSelected && !bIsSelected) {
         return -1
@@ -84,7 +115,7 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
 
   const selectedMedia = media.filter((doc) => {
     if (field.hasMany) {
-      return (value as string[])?.includes(doc.id)
+      return (value as (string | number)[])?.includes(doc.id)
     }
     return value === doc.id
   })
@@ -100,10 +131,12 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
 
   return (
     <div className={baseClass}>
+      <DocumentDrawer onSave={handleSave} />
       <style>
         {`
           .${baseClass}__header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
             gap: 10px;
             margin-bottom: 0px;
@@ -172,47 +205,63 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
           }
         `}
       </style>
-      <FieldLabel label={field.label} />
-      <Collapsible
-        header={
-          <div className={`${baseClass}__header`}>
-            <span>
-              {selectedMedia.length === 0 ? 'nenhuma ' : selectedMedia.length} mídia
-              {selectedMedia.length > 1 ? 's' : ''} selecionada
-              {selectedMedia.length > 1 ? 's' : ''}
-            </span>
-          </div>
-        }
-        initCollapsed={true}
-      >
-        <TextInput
-          path="search-media"
-          placeholder="Search media..."
-          value={filter}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value)}
-        />
-        <div className={`${baseClass}__gallery`}>
-          {filteredAndSortedMedia.map((doc) => {
-            const isSelected =
-              (field.hasMany && (value as string[])?.includes(doc.id)) || value === doc.id
-            const thumbnailUrl = doc.sizes?.thumbnail?.url || doc.url
-            const fullThumbnailUrl = thumbnailUrl ? `${serverURL}${thumbnailUrl}` : undefined
+      <FieldLabel label={field.label as string} />
+      <div className={`${baseClass}__selector`}>
+        <DocumentDrawerToggler className={`${baseClass}__add-new`}>
+          <Button
+            aria-label="Add New"
+            buttonStyle="icon-label"
+            el="div"
+            icon="plus"
+            iconStyle="with-border"
+          >
+            {'New Media'}
+          </Button>
+        </DocumentDrawerToggler>
+        <Collapsible
+          header={
+            <div className={`${baseClass}__header`}>
+              <span>
+                {selectedMedia.length === 0
+                  ? 'no media selected'
+                  : `${selectedMedia.length} selected media`}
+              </span>
 
-            return (
-              <div
-                key={doc.id}
-                className={`${baseClass}__thumbnail-item ${
-                  isSelected ? `${baseClass}__thumbnail-item--is-selected` : ''
-                }`}
-                onClick={() => handleImageClick(doc.id)}
-              >
-                {fullThumbnailUrl && <img src={fullThumbnailUrl} alt={doc.alt || 'media'} />}
-                {isSelected && <div className={`${baseClass}__selected-check`}>✔</div>}
-              </div>
-            )
-          })}
-        </div>
-      </Collapsible>
+              <DocumentDrawerToggler></DocumentDrawerToggler>
+            </div>
+          }
+          initCollapsed={true}
+        >
+          <TextInput
+            path="search-media"
+            placeholder="Search media..."
+            value={filter}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value)}
+          />
+          <div className={`${baseClass}__gallery`}>
+            {filteredAndSortedMedia.map((doc) => {
+              const isSelected =
+                (field.hasMany && (value as (string | number)[])?.includes(doc.id)) ||
+                value === doc.id
+              const thumbnailUrl = doc.sizes?.thumbnail?.url || doc.url
+              const fullThumbnailUrl = thumbnailUrl ? `${serverURL}${thumbnailUrl}` : undefined
+
+              return (
+                <div
+                  key={doc.id}
+                  className={`${baseClass}__thumbnail-item ${
+                    isSelected ? `${baseClass}__thumbnail-item--is-selected` : ''
+                  }`}
+                  onClick={() => handleImageClick(doc.id)}
+                >
+                  {fullThumbnailUrl && <img src={fullThumbnailUrl} alt={doc.alt || 'media'} />}
+                  {isSelected && <div className={`${baseClass}__selected-check`}>✔</div>}
+                </div>
+              )
+            })}
+          </div>
+        </Collapsible>
+      </div>
       <div className={`${baseClass}__selected-media`}>
         {selectedMedia.map((doc) => {
           const thumbnailUrl = doc.sizes?.thumbnail?.url || doc.url

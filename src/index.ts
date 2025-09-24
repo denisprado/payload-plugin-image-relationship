@@ -16,7 +16,7 @@ export const imageRelationshipPlugin =
       ...incomingConfig,
       collections: incomingConfig.collections?.map((collection) => {
         const newFields = collection.fields.map((field) => {
-          if (field.type === 'relationship') {
+          if (field.type === 'relationship' || field.type === 'upload') {
             const fieldRelationTo = Array.isArray(field.relationTo)
               ? field.relationTo
               : [field.relationTo]

@@ -55,6 +55,18 @@ This approach ensures that only the intended relationship fields are affected.
 
 - Payload CMS: `^3.0.0`
 
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+### Support this project
+
+If you find this plugin useful, please consider supporting its development.
+
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=denisforigo@gmail.com&item_name=Support+payload-plugin-image-relationship+project" target="_blank">
+  <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" alt="Donate with PayPal" />
+</a>
+
 ## License
 
 [MIT](LICENSE)

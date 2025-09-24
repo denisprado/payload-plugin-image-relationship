@@ -15,7 +15,7 @@ export const Posts: CollectionConfig = {
     {
       name: 'featuredImage',
       label: 'Featured Image',
-      type: 'relationship', // Este campo usará seu componente customizado
+      type: 'upload', // Este campo usará seu componente customizado
       relationTo: 'media', // Relacionado à coleção Media
       required: true,
     },
