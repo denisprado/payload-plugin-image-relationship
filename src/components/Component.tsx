@@ -12,6 +12,24 @@ import {
 import { RelationshipFieldClientComponent } from 'payload'
 
 const baseClass = 'image-relationship'
+const PAGE_SIZE = 30
+
+// Debounce hook
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value)
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [value, delay])
+
+  return debouncedValue
+}
 
 type Doc = Record<string, unknown> & {
   id: string | number
@@ -33,9 +51,14 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
   } = useConfig()
 
   const [media, setMedia] = useState<Doc[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isFetching, setIsFetching] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(true)
   const [filter, setFilter] = useState('')
   const [forceReload, setForceReload] = useState(0)
+  const [page, setPage] = useState(1)
+  const [hasNextPage, setHasNextPage] = useState(false)
+
+  const debouncedFilter = useDebounce(filter, 500)
 
   const relationTo = Array.isArray(field.relationTo) ? field.relationTo[0] : field.relationTo
 
@@ -43,24 +66,46 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
     collectionSlug: relationTo,
   })
 
-  useEffect(() => {
-    const fetchMedia = async () => {
+  const fetchMedia = useCallback(
+    async (requestedPage: number, currentFilter: string) => {
+      setIsFetching(true)
+      let url = `${serverURL}/api/${relationTo}?limit=${PAGE_SIZE}&page=${requestedPage}`
+      if (currentFilter) {
+        const whereQuery = `&where[or][0][alt][like]=${currentFilter}&where[or][1][filename][like]=${currentFilter}`
+        url += whereQuery
+      }
+
       try {
-        setIsLoading(true)
-        const response = await fetch(`${serverURL}/api/${relationTo}?limit=2000`)
+        const response = await fetch(url)
         if (response.ok) {
           const data = await response.json()
-          setMedia(data.docs)
+          if (requestedPage === 1) {
+            setMedia(data.docs)
+          } else {
+            setMedia((prev) => [...prev, ...data.docs])
+          }
+          setPage(requestedPage)
+          setHasNextPage(data.hasNextPage)
         }
       } catch (error) {
         console.error('Error fetching media:', error)
       } finally {
-        setIsLoading(false)
+        setIsFetching(false)
+        setInitialLoading(false)
       }
-    }
+    },
+    [serverURL, relationTo],
+  )
 
-    fetchMedia()
-  }, [serverURL, relationTo, forceReload])
+  useEffect(() => {
+    fetchMedia(1, debouncedFilter)
+  }, [debouncedFilter, forceReload, fetchMedia])
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetching) {
+      fetchMedia(page + 1, debouncedFilter)
+    }
+  }
 
   const handleImageClick = (id: string | number) => {
     if (field.hasMany) {
@@ -92,6 +137,7 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
   const filteredAndSortedMedia = media
     .filter((doc) => {
       const searchText = filter.toLowerCase()
+      if (!searchText) return true // If no filter, show all loaded media
       const altText = doc.alt?.toLowerCase() || ''
       const filename = doc.filename?.toLowerCase() || ''
       return altText.includes(searchText) || filename.includes(searchText)
@@ -120,10 +166,10 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
     return value === doc.id
   })
 
-  if (isLoading) {
+  if (initialLoading) {
     return (
       <div className={baseClass}>
-        <FieldLabel label={field.label} />
+        <FieldLabel label={field.label as string} />
         <div>Loading media...</div>
       </div>
     )
@@ -203,6 +249,10 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
             font-size: 12px;
             font-weight: bold;
           }
+          .${baseClass}__load-more {
+            margin-top: 10px;
+            text-align: center;
+          }
         `}
       </style>
       <FieldLabel label={field.label as string} />
@@ -260,6 +310,13 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
               )
             })}
           </div>
+          {hasNextPage && (
+            <div className={`${baseClass}__load-more`}>
+              <Button onClick={handleLoadMore} disabled={isFetching}>
+                {isFetching && page > 1 ? 'Loading...' : 'Load More'}
+              </Button>
+            </div>
+          )}
         </Collapsible>
       </div>
       <div className={`${baseClass}__selected-media`}>

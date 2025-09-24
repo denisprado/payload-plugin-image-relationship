@@ -44,7 +44,7 @@
     "test": "pnpm test:int && pnpm test:e2e",
     "test:e2e": "playwright test",
     "test:int": "vitest",
-    "release": "npm version patch -m \"chore(release): v%s\" && npm publish && git push --follow-tags",
+        "release": "npm version patch -m \"chore(release): v%s\" && npm publish && git push --follow-tags",
     "ship": "git add . && git commit -m \"chore: apply changes and prepare for release\" && pnpm release"
   },
   "devDependencies": {
