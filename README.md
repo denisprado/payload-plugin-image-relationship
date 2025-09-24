@@ -4,8 +4,7 @@
 
 A plugin for [Payload CMS](https://payloadcms.com) to enhance the relationship field with a visual image selector.
 
-![Image Relationship Plugin Screenshot](https://raw.githubusercontent.com/forigo/payload-plugin-image-relationship/main/screenshot.png)
-_(TODO: Add a real screenshot)_
+![Image Relationship Plugin Screenshot](https://raw.githubusercontent.com/denisprado/payload-plugin-image-relationship/main/screenshot.png)
 
 ## Features
 
