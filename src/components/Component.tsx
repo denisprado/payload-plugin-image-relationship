@@ -263,6 +263,21 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
             margin-top: 10px;
             text-align: center;
           }
+          .${baseClass}__donate-collapsible {
+            margin: 10px 0;
+          }
+          .${baseClass}__donate-banner {
+            text-align: left;
+						display: flex;
+						gap: 10px;
+						align-items: center;
+						flex-wrap: wrap;
+            padding: 10px;
+            background-color: var(--theme-elevation-100);
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+          }
         `}
       </style>
       <FieldLabel label={field.label as string} />
@@ -298,6 +313,35 @@ const ImageRelationship: RelationshipFieldClientComponent = (props) => {
             value={filter}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value)}
           />
+          <Collapsible
+            className={`${baseClass}__donate-collapsible`}
+            collapsibleStyle="default"
+            header={<span>Support this plugin</span>}
+            initCollapsed={false}
+          >
+            <div className={`${baseClass}__donate-banner`}>
+              <a
+                href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=denisforigo@gmail.com&item_name=Support+payload-plugin-image-relationship+project&amount=10.00&currency_code=USD"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
+                  alt="Donate with PayPal"
+                />
+              </a>
+              <p
+                style={{
+                  border: '1px solid #555',
+                  padding: '10px',
+                  borderRadius: '5px',
+                  height: '100%',
+                }}
+              >
+                If you find this plugin useful, please consider supporting its development.
+              </p>
+            </div>
+          </Collapsible>
           <div className={`${baseClass}__gallery`}>
             {filteredAndSortedMedia.map((doc) => {
               const isSelected =
