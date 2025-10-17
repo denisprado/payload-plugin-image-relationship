@@ -13,6 +13,10 @@ A Payload CMS plugin that enhances the relationship field to support image uploa
 - Collapsible interface to save screen space.
 - Shows a preview of selected images.
 
+## Screenshot
+
+![Payload Plugin Image Relationship Screenshot](screenshot.png)
+
 ## Installation
 
 ```bash
