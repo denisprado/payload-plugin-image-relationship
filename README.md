@@ -15,7 +15,7 @@ A Payload CMS plugin that enhances the relationship field to support image uploa
 
 ## Screenshot
 
-![Payload Plugin Image Relationship Screenshot](screenshot.png)
+![Payload Plugin Image Relationship Screenshot](https://raw.githubusercontent.com/denisprado/payload-plugin-image-relationship/main/screenshot.png)
 
 ## Installation
 
